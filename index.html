@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokédex</title>
+
+  <!-- estilos -->
+  <style>
+    body {
+      margin: 0;
+      background-color: #FCE44C;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    main {
+      width: 400px;
+      background-color: #DC0A2D;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1em;
+      padding-top: 4em;
+      margin: 0 auto;
+      border-radius: 1em;
+      text-align: center;
+      color: white;
+      font-family: system-ui;
+    }
+
+    .lights {
+      border-bottom-left-radius: 2px solid green;
+    }
+
+    .display {
+      background: #8DB9DC;
+      border: 10px solid #FFFFFE;
+
+      width: 75%;
+    }
+
+    #pokemon::first-letter {
+      text-transform: uppercase;
+    }
+
+    input {
+      /* outline: 1px solid yellow; */
+      margin-top: 1em;
+      width: 50%;
+      padding: 1em;
+      border: none;
+      box-sizing: border-box;
+      border-radius: 1em;
+      box-shadow: inset 0 0 15px rgba(255, 0, 234, 0.438);
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="lights">
+    <span>0</span>
+  </div>
+  <main>
+
+
+
+    <div class="display">
+      <img id="image" src="" alt="">
+    </div>
+
+    <h1 id="pokemon">Pikachu</h1>
+
+    <input type="text" id="search" placeholder="Nombre o Id">
+  </main>
+
+  <script>
+    async function getPokemon(id) {
+      try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+
+        const data = await response.json()
+        return data
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    //init app
+    async function init() {
+
+      // Harcodear inicio de app
+      const firstPokemon = await getPokemon(199)
+
+      console.log(firstPokemon);
+
+      updatePokemon(firstPokemon)
+
+    }
+
+
+    //render datos de pokemon
+    function updatePokemon(pokemon) {
+      // pokemon
+      window.pokemon.textContent = pokemon.name
+      // imagen pokemon
+      window.image.setAttribute('src', pokemon.sprites.front_default)
+    }
+
+    init()
+
+    //buscar pokemon
+    window.search.addEventListener('change', async () => {
+      console.log(window.search.value);
+      const pokemon = await getPokemon(window.search.value)
+
+      updatePokemon(pokemon)
+
+    })
+
+  </script>
+
+</body>
+
+</html>
